@@ -65,11 +65,13 @@ int opcao = -1;
 				
 			case 3:
 				System.out.println("Cadastrar Produto\n\n");
+				cadastrarProduto();
 				keyPress();
 				break;
 				
 			case 4:
 				System.out.println("Atualizar Produto\n\n");
+				atualizarProduto();
 				keyPress();
 				break;
 				
@@ -113,6 +115,30 @@ int opcao = -1;
 	    produtoController.procurarPorId(id);
 	}
 	
+	private static void cadastrarProduto() {
+		System.out.println("Escolha a categoria:");
+	    System.out.println("1 - Limpeza");
+	    System.out.println("2 - Alimento");
+	    int categoria = leia.nextInt();
+	    leia.nextLine();
+
+	    System.out.print("Digite o nome do produto: ");
+	    String nome = leia.nextLine();
+
+	    System.out.print("Digite o preço do produto: ");
+	    double preco = leia.nextDouble();
+	    leia.nextLine();
+	    
+
+	    System.out.print("Digite a quantidade em estoque: ");
+	    int quantidadeEstoque = leia.nextInt();
+	    leia.nextLine();
+	    
+	    Produto produto = new Produto(produtoController.gerarId(), nome, preco, categoria, quantidadeEstoque);
+	    
+	    produtoController.cadastrar(produto);
+	}
+	
 	private static void deletarProduto() {
 		System.out.print("Digite o Id do produto: ");
 		int id = leia.nextInt();
@@ -134,6 +160,24 @@ int opcao = -1;
 		} else {
 			System.out.printf("\nO produto Id %d não foi encontrado!", id);
 		}
+	}
+	
+	private static void atualizarProduto() {
+	    System.out.print("Digite o Id do produto que deseja atualizar: ");
+	    int id = leia.nextInt();
+	    leia.nextLine();
+
+	    Produto produtoExistente = produtoController.procurarPorId(id);
+
+	    if (produtoExistente != null) {
+	        System.out.print("Digite o novo nome do produto: ");
+	        String novoProduto = leia.nextLine();
+
+	        Produto produtoAtualizado = produtoController.procurarPorId(id);
+	        produtoController.atualizar(produtoAtualizado);
+	    } else {
+	        System.out.printf("\nO produto Id %d não foi encontrado!\n", id);
+	    }
 	}
 
 }
