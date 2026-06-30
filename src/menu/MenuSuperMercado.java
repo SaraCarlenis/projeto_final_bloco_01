@@ -3,9 +3,13 @@ package menu;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import controller.ProdutoController;
+import model.Produto;
+
 public class MenuSuperMercado {
 	
 	private static final Scanner leia = new Scanner(System.in);
+	private static ProdutoController produtoController = new ProdutoController();
 
 	public static void main(String[] args) {
 
@@ -28,7 +32,7 @@ int opcao = -1;
 			System.out.println("                                                     ");
 			System.out.println("*****************************************************");
 			System.out.println("Entre com a opção desejada:                          ");
-
+			
 			try {
 				opcao = leia.nextInt();
 				leia.nextLine();
@@ -49,11 +53,13 @@ int opcao = -1;
 			
 			case 1:
 				System.out.println("Listar todos os Produtos\n\n");
+				visualizar();
 				keyPress();
 				break;
 				
 			case 2:
 				System.out.println("Listar Produto pelo ID\n\n");
+				listaProdutoId();
 				keyPress();
 				break;
 				
@@ -69,6 +75,7 @@ int opcao = -1;
 				
 			case 5:
 				System.out.println("Deletar Produto\n\n");
+				deletarProduto();
 				keyPress();
 				break;
 			default:
@@ -79,7 +86,7 @@ int opcao = -1;
 		}
 
 	}
-
+	
 	public static void sobre() {
 		System.out.println("\n*********************************************************");
 		System.out.println("Projeto Desenvolvido por: ");
@@ -91,6 +98,42 @@ int opcao = -1;
 	public static void keyPress() {
 		System.out.println("\n\nPressione Enter para continuar...");
 		leia.nextLine();
+	}
+	
+
+	private static void visualizar() {
+		produtoController.listarTodas();
+	}
+	
+	private static void listaProdutoId() {
+		System.out.print("Digite o Id do produto: ");
+	    int id = leia.nextInt();
+	    leia.nextLine();
+
+	    produtoController.procurarPorId(id);
+	}
+	
+	private static void deletarProduto() {
+		System.out.print("Digite o Id do produto: ");
+		int id = leia.nextInt();
+		leia.nextLine();
+
+		Produto produto = produtoController.procurarPorId(id);
+
+		if (produto != null) {
+
+			System.out.print("\nTem certeza que deseja excluir o produto? (S/N): ");
+			String confirmacao = leia.nextLine();
+
+			if (confirmacao.equalsIgnoreCase("S")) {
+				produtoController.deletar(id);
+			} else {
+				System.out.println("\nOperação cancelada!");
+			}
+
+		} else {
+			System.out.printf("\nO produto Id %d não foi encontrado!", id);
+		}
 	}
 
 }
